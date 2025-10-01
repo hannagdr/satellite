@@ -29,7 +29,6 @@ public class Satellite {
         //Find different rows & columns
         int x1 = findFirstDifferent(noOfRows, true);
         int x2 = findLastDifferent(noOfRows - 1, true);
-
         int y1 = findFirstDifferent(noOfCols, false);
         int y2 = findLastDifferent(noOfCols - 1, false);
 
@@ -63,7 +62,7 @@ public class Satellite {
 
     private static int findLastDifferent(int start, boolean checkRows) {
         int i = start;
-        while (i >= -1 && (checkRows ? equalRows(i) : equalCols(i))) {
+        while (i >= 0 && (checkRows ? equalRows(i) : equalCols(i))) {
             i--;
         }
         return i;
