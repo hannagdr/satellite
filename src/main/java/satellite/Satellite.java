@@ -10,12 +10,14 @@ public class Satellite {
 
     public static void main(String[] args) {
 
-        try {
-            inputReader();
-            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+        try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"))) {
+            // Read dimensions
+            noOfRows = Integer.parseInt(reader.readLine().trim());
+            noOfCols = Integer.parseInt(reader.readLine().trim());
 
-            reader.readLine();
-            reader.readLine();
+            // Initialize arrays
+            oldImage = new int[noOfRows][noOfCols];
+            newImage = new int[noOfRows][noOfCols];
 
             oldImage = readImages(reader, noOfRows, noOfCols);
             newImage = readImages(reader, noOfRows, noOfCols);
@@ -24,7 +26,7 @@ public class Satellite {
             throw new RuntimeException(e);
         }
 
-        //Determine corners
+        //Find different rows & columns
         int x1 = findFirstDifferent(noOfRows, true);
         int x2 = findLastDifferent(noOfRows - 1, true);
 
@@ -36,20 +38,6 @@ public class Satellite {
             System.out.println("The two images are the same");
         } else {
             System.out.println((x1 + 1) + " " + (y1 + 1) + " " + (x2 + 1) + " " + (y2 + 1));
-        }
-    }
-
-    //Reading input from file
-    public static void inputReader() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
-            noOfRows = Integer.parseInt(reader.readLine().trim());
-            noOfCols = Integer.parseInt(reader.readLine().trim());
-
-            oldImage = new int[noOfRows][noOfCols];
-            newImage = new int[noOfRows][noOfCols];
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
