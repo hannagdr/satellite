@@ -10,61 +10,79 @@ public class Satellite {
     static int noOfRows, noOfCols;
 
     public static void main(String[] args) {
+
         try {
-           // {read from input.txt}
+            inputReader();
+            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+
+            reader.readLine();
+            reader.readLine();
+
+            oldImage = readImages(reader, noOfRows, noOfCols);
+            newImage = readImages(reader, noOfRows, noOfCols);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Determine corners
+        int x1 = findFirstDifferent(0, noOfRows, true);
+        int x2 = findLastDifferent(noOfRows - 1, -1, true);
+
+        int y1 = findFirstDifferent(0, noOfCols, false);
+        int y2 = findLastDifferent(noOfCols - 1, -1, false);
+
+        // Write output
+        if (x1 > x2 || y1 > y2) {
+            System.out.println("The two images are the same");
+        } else {
+            System.out.println((x1 + 1) + " " + (y1 + 1) + " " + (x2 + 1) + " " + (y2 + 1));
+        }
+    }
+
+    //Reading input from file
+    public static void inputReader() {
+        try {
             BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
             noOfRows = Integer.parseInt(reader.readLine().trim());
             noOfCols = Integer.parseInt(reader.readLine().trim());
 
             oldImage = new int[noOfRows][noOfCols];
             newImage = new int[noOfRows][noOfCols];
-
-            // {read old image}
-            for (int row = 0; row < noOfRows; row++) {
-                String[] parts = reader.readLine().trim().split("\\s+");
-                for (int col = 0; col < noOfCols; col++) {
-                    oldImage[row][col] = Integer.parseInt(parts[col]);
-                }
-            }
-
-            // {read new image}
-            for (int row = 0; row < noOfRows; row++) {
-                String[] parts = reader.readLine().trim().split("\\s+");
-                for (int col = 0; col < noOfCols; col++) {
-                    newImage[row][col] = Integer.parseInt(parts[col]);
-                }
-            }
-
-            reader.close();
-
-            // {determine upper corner}
-            int x1 = 0;
-            while (x1 < noOfRows && equalRows(x1)) x1++;
-
-            int y1 = 0;
-            while (y1 < noOfCols && equalCols(y1)) y1++;
-
-            // {determine lower corner}
-            int x2 = noOfRows - 1;
-            while (x2 >= 0 && equalRows(x2)) x2--;
-
-            int y2 = noOfCols - 1;
-            while (y2 >= 0 && equalCols(y2)) y2--;
-
-            // {output}
-            if (x1 > x2 || y1 > y2) {
-                System.out.println("The two images are the same");
-            } else {
-                x1++;x2++;y1++;y2++;
-                System.out.println(x1 + " " + y1 + " " + (x2) + " " + (y2));
-            }
-
         } catch (IOException e) {
-            System.err.println("Error reading input file: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    // {check if a row is equal in both images}
+    public static int[][] readImages(BufferedReader reader, int rows, int cols) throws IOException {
+        int[][] image = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            String[] parts = reader.readLine().trim().split("\\s+");
+            for (int j = 0; j < cols; j++) {
+                image[i][j] = Integer.parseInt(parts[j]);
+            }
+        }
+        return image;
+    }
+
+    //Determining corners
+    private static int findFirstDifferent(int start, int end, boolean checkRows) {
+        int i = start;
+        while (i < end && (checkRows ? equalRows(i) : equalCols(i))) {
+            i++;
+        }
+        return i;
+    }
+
+    private static int findLastDifferent(int start, int end, boolean checkRows) {
+        int i = start;
+        while (i >= end && (checkRows ? equalRows(i) : equalCols(i))) {
+            i--;
+        }
+        return i;
+    }
+
+    // Checking if a row is equal in both images
     public static boolean equalRows(int row) {
         for (int col = 0; col < noOfCols; col++) {
             if (oldImage[row][col] != newImage[row][col]) {
@@ -74,7 +92,7 @@ public class Satellite {
         return true;
     }
 
-    // {check if a column is equal in both images}
+    // Checking if a column is equal in both images
     public static boolean equalCols(int col) {
         for (int row = 0; row < noOfRows; row++) {
             if (oldImage[row][col] != newImage[row][col]) {
