@@ -1,7 +1,6 @@
 package satellite;
 
 import java.io.*;
-import java.util.*;
 
 public class Satellite {
 
@@ -26,11 +25,11 @@ public class Satellite {
         }
 
         //Determine corners
-        int x1 = findFirstDifferent(0, noOfRows, true);
-        int x2 = findLastDifferent(noOfRows - 1, -1, true);
+        int x1 = findFirstDifferent(noOfRows, true);
+        int x2 = findLastDifferent(noOfRows - 1, true);
 
-        int y1 = findFirstDifferent(0, noOfCols, false);
-        int y2 = findLastDifferent(noOfCols - 1, -1, false);
+        int y1 = findFirstDifferent(noOfCols, false);
+        int y2 = findLastDifferent(noOfCols - 1, false);
 
         // Write output
         if (x1 > x2 || y1 > y2) {
@@ -66,17 +65,17 @@ public class Satellite {
     }
 
     //Determining corners
-    private static int findFirstDifferent(int start, int end, boolean checkRows) {
-        int i = start;
+    private static int findFirstDifferent(int end, boolean checkRows) {
+        int i = 0;
         while (i < end && (checkRows ? equalRows(i) : equalCols(i))) {
             i++;
         }
         return i;
     }
 
-    private static int findLastDifferent(int start, int end, boolean checkRows) {
+    private static int findLastDifferent(int start, boolean checkRows) {
         int i = start;
-        while (i >= end && (checkRows ? equalRows(i) : equalCols(i))) {
+        while (i >= -1 && (checkRows ? equalRows(i) : equalCols(i))) {
             i--;
         }
         return i;
